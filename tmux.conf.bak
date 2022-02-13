@@ -1,0 +1,36 @@
+source /usr/share/powerline/bindings/tmux/powerline.conf
+# Change prefix key
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
+
+# Make nvim respond properly
+set -s escape-time 0
+
+# Apearance
+set -g default-terminal "screen-256color"
+setw -g aggressive-resize on
+
+# Set status bar position
+set -g status-position top
+set -g status-justify centre
+# Start windows and panes at 1
+set -g base-index 1
+setw -g pane-base-index 1
+
+# Set scroll back
+set-option -g history-limit 100000
+
+# Key-bind
+bind-key m set-option -g mouse \; display "Mouse: #{?mouse,ON,OFF}"
+bind-key h split-window -h
+bind-key v split-window -v
+bind-key r source-file ~/.config/tmux/tmux.conf
+bind-key o display-popup -E "projectmanager open"
+bind-key p display-popup -E "projectmanager create"
+bind-key P display-popup -E "projectmanager edit"
+
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R

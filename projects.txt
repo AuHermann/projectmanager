@@ -1,0 +1,3 @@
+CONFIGS /home/ahermann/.config/
+NVIM    /home/ahermann/.config/nvim/
+NVIM_LUA /home/ahermann/.config/nvim/lua/
