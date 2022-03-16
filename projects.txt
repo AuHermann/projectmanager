@@ -1,3 +1,6 @@
 CONFIGS /home/ahermann/.config/
 NVIM    /home/ahermann/.config/nvim/
-NVIM_LUA /home/ahermann/.config/nvim/lua/
+projectmanager /home/ahermann/.config/projectmanager 
+MAL /home/ahermann/eng/6th/mal jupyter
+STOK /home/ahermann/eng/6th/stok jupyter
+ETLA /home/ahermann/eng/6th/etla jupyter
