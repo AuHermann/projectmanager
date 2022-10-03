@@ -1,9 +1,39 @@
 #!/bin/bash
 
-CONFIG_PATH=$HOME/.config/projectmanager/
-PROJECTS_FILE=${CONFIG_PATH}projects.txt
+CONFIG_PATH=$HOME/.config/projectmanager
+PROJECTS_FILE=${CONFIG_PATH}/projects.txt
 
-if [ $1 == open ]; then
+create_project() {
+    read -e -p "Enter Project name: " projectname
+    read -e -p "Enter new project path: " filepath
+    project_type=$(awk '{ print $0 }' $HOME/.config/projectmanager/types.txt | fzf )
+    
+    if [ ! -d $filepath ]; then
+        mkdir -p $filepath
+    fi
+    
+    full_path=$(realpath $filepath)
+    echo "$projectname $full_path $project_type" >> $HOME/config/projectmanager/projects.txt
+    choose_default "$project_type" "$full_path" "$projectname"
+}
+
+
+choose_default() {
+    case $1 in
+        jupyter)
+            tmux new-window -n $3 -c $2 jupyter-notebook . 
+            ;;
+        markdown | puml)
+            tmux new-window -n $3 -c $2 code .
+            ;;
+        *)
+            tmux new-window -n $3 -c $2 nvim .
+            ;;
+    esac
+
+}
+
+open_project() { 
     projectname=$(awk '{ printf "%-20s %s\n", $1 ,$2 }' $PROJECTS_FILE | fzf )
     if [ -z "$projectname" ]; then
 	    exit
@@ -12,25 +42,30 @@ if [ $1 == open ]; then
     projectname=${projectname[0]}
     projectdir=$(grep "\<$projectname\>" $PROJECTS_FILE | awk '{ print $2 }')
     projecttype=$(grep "\<$projectname\>" $PROJECTS_FILE | awk '{ print $3 }')
-    case $projecttype in
-        jupyter)
-            tmux new-window -n $projectname -c $projectdir jupyter notebook
-            ;;
-        *)
-            tmux new-window -n $projectname -c $projectdir nvim .
-            ;;
-    esac
-
-
-elif [ $1 == create ]; then
-    CREATE_SCRIPT=${CONFIG_PATH}createproject.sh
-    tmux new-window $CREATE_SCRIPT
-
-elif [ $1 == edit ]; then
-    tmux new-window nvim $PROJECTS_FILE
-else
-    echo "Help:"
-fi
-command() { 
+    if [[ -f "${projectdir}/.project_setup" ]]; then
+        tmux new-window -n $projectname -c $projectdir ./.project_setup 
+    else
+        choose_default "$projecttype" "$projectdir" "$projectname"
+    fi
 }
+
+
+
+
+case $1 in
+    open)
+        open_project
+        ;;
+    create)
+        tmux new-window projectmanager create-helper
+        ;;
+    create-helper)
+        create_project
+        ;;
+    edit)
+        tmux new-window nvim $PROJECTS_FILE
+        ;;  
+esac 
+
+
 

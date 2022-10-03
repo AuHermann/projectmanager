@@ -4,3 +4,9 @@ projectmanager /home/ahermann/.config/projectmanager
 MAL /home/ahermann/eng/6th/mal jupyter
 STOK /home/ahermann/eng/6th/stok jupyter
 ETLA /home/ahermann/eng/6th/etla jupyter
+apk-ex /home/ahermann/swapk_exercises c++
+ba-report /home/ahermann/Bachelor/report report
+ba-code /home/ahermann/Bachelor/code c++
+bachelor /home/ahermann/Bachelor report
+ba-diagrams /home/ahermann/Bachelor/report/diagrams puml
+ff /home/ahermann/ff jupyter
